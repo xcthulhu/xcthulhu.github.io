@@ -3,6 +3,12 @@ body {
   padding-top: 20px;
 }
 
+/* Use anonymous pro for pre tags */
+@import url(http://fonts.googleapis.com/css?family=Anonymous+Pro);
+pre {
+	font-family: 'Anonymous Pro', monospace;
+}
+
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .footer,
