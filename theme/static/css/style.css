@@ -1,10 +1,16 @@
-/* Use Alegreya Sans for body */
-@import url(http://fonts.googleapis.com/css?family=Alegreya+Sans:300,700,300italic);
+/* Use Merriweather for body */
+@import url(http://fonts.googleapis.com/css?family=Merriweather:300,300italic,700,700italic);
 
-/* Space out content a bit */
 body {
+  /* Space out content a bit */
   padding-top: 20px;
-  font-family: 'Alegreya Sans', sans-serif;
+  font-family: 'Merriweather', Georgia, serif;;
+}
+
+p {
+	font-weight: 300;
+	font-size: 1em;
+	line-height: 1.8;
 }
 
 /* Use anonymous pro for pre tags */
