@@ -1,6 +1,10 @@
+/* Use Alegreya Sans for body */
+@import url(http://fonts.googleapis.com/css?family=Alegreya+Sans:300,700,300italic);
+
 /* Space out content a bit */
 body {
   padding-top: 20px;
+  font-family: 'Alegreya Sans', sans-serif;
 }
 
 /* Use anonymous pro for pre tags */
