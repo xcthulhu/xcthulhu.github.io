@@ -1669,29 +1669,38 @@ table.dataframe th, td {
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In this blog post, we investigate a relatively <em>conceptually easy</em> (IMO) version of the axiom of choice involving <em>Cartesian products</em>.</p>
-<p>We will show that it is logically equivalent to the <em>Axiom of Choice (v0.1-prerelease)</em> we previously presented, which establishes that every surjective function has a right inverse.</p>
+<p>In <a href="http://xcthulhu.github.io/a-gentlish-choice.html">my last blog post</a>, I introduced a simple version of the Axiom of Choice:</p>
+<blockquote>
+<p><strong>Axiom of Choice</strong> (v0.1-prerelease): If <span class="math">\(f\)</span> is surjective, then <span class="math">\(f\)</span> has a right inverse.</p>
+</blockquote>
+<p>In this blog post, I'll introduce another simple version of the axiom of choice involving <em>Cartesian products</em>.</p>
+<p>I will show that it is logically equivalent to the <em>Axiom of Choice (v0.1-prerelease)</em> previously presented, and talk a little about the rôle that cartesian products play in programming.</p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="What's-a-Cartesian-product?">What's a Cartesian product?<a class="anchor-link" href="#What's-a-Cartesian-product?">&#182;</a></h3>
+<h2 id="What's-a-Cartesian-product?">What's a Cartesian product?<a class="anchor-link" href="#What's-a-Cartesian-product?">&#182;</a></h2>
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>A Cartesian product is represented by the symbols <span class="math">\(A\times B\)</span>.</p>
-<p>In mathematics, members of a Cartesian product are represented using <em>ordered pair</em> notation. If <span class="math">\(a\)</span> is in <span class="math">\(A\)</span> and <span class="math">\(b\)</span> is in <span class="math">\(B\)</span>, then the <em>ordered pair</em> <span class="math">\(\langle a, b\rangle\)</span> is in <span class="math">\(A \times B\)</span>. It is conventional to use the <a href="https://en.wikipedia.org/wiki/Ordered_pair#Kuratowski_definition">Kuratowski definition</a> of an ordered pair:</p>
+<p>Cartesian products are named after <a href="https://en.wikipedia.org/wiki/Ren%C3%A9_Descartes">René Descartes</a>, who along with <a href="https://en.wikipedia.org/wiki/Pierre_de_Fermat">Pierre de Fermat</a> invented the <em>Cartesian plane</em> in 1637. Cartesian products are an abstract generalization of the Cartesian plane.</p>
+<center>
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Cartesian-coordinate-system.svg" alt="Cartesian Plane" />
+</center>
+
+<p>A Cartesian product is represented by the symbols <span class="math">\(A\times B\)</span>. The Cartesian plane is represented by <span class="math">\(\mathbb{R}\times\mathbb{R}\)</span> in this notation.</p>
+<p>In mathematics, members of a <em>(binary) Cartesian product</em> are represented using <em>ordered pair</em> notation. If <span class="math">\(a\)</span> is in <span class="math">\(A\)</span> and <span class="math">\(b\)</span> is in <span class="math">\(B\)</span>, then the <em>ordered pair</em> <span class="math">\(\langle a, b\rangle\)</span> is in <span class="math">\(A \times B\)</span>. It is conventional to use the <a href="https://en.wikipedia.org/wiki/Ordered_pair#Kuratowski_definition">Kuratowski definition</a> of an ordered pair:</p>
 <p style="text-align:center">
 <span class="math">\(\langle a, b\rangle = \{\{a\},\{a,b\}\}\)</span>
 </p>
 
-<p>In C++, if for any two types <span class="math">\(A\)</span> and <span class="math">\(B\)</span>, the Cartesian product type <span class="math">\(A\times B\)</span> is represented via <code>std::pair &lt;A,B&gt;</code>.</p>
+<p>In C++, if for any two types <span class="math">\(A\)</span> and <span class="math">\(B\)</span>, the Cartesian product type <span class="math">\(A\times B\)</span> is represented via <code>std::pair &lt;A,B&gt;</code>, and the function <span class="math">\(\lambda x. \lambda y.\langle x, y \rangle\)</span> is represented by the constructor <code>pair&lt;A,B&gt; (A x, B y)</code>.</p>
 <p>In the world of JAVA, the seven sages of software convened on <code>comp.lang.java.help</code> back in 2007. Whilst stroking their august neckbeards, the sages decreed that, like so many convenient language constructs of yesteryear, pair types should be <a href="https://groups.google.com/d/msg/comp.lang.java.help/-LY_xkXBtIc/PYyofzYuxawJ"><em>considered harmful</em></a>. But if you want, this <a href="http://stackoverflow.com/a/677248">stackoverflow</a> has a recipe for rolling your own (perhaps someone should port <code>boost</code> to JAVA? &lt;/joke class=&quot;bad&quot;&gt;). It's even <em>hashable</em>, although the pairing function it uses is unfamiliar to me. It doesn't appear to be <a href="https://en.wikipedia.org/wiki/Injective_function">injective</a>, so I would suggest swapping it out for the <a href="https://en.wikipedia.org/wiki/Pairing_function">Cantor pairing function</a>.</p>
-<p>Other languages represent ordered pairs with <em>lists</em> or <em>arrays</em> (ruby, javascript, LISP) or <em>tuples</em> (python, Haskell, .NET).</p>
-<p>Python in particular uses notation inspired by set theory. Python represents ordered pairs with <em>tuples</em>. Let <span class="math">\(A = {0,1,2,3}\)</span> and <span class="math">\(B = {4,5,6}\)</span>, then their product is computed as follows, using a <em>comprehension</em>:</p>
+<p>Other languages represent ordered pairs with <em>arrays</em> or <em>lists</em> (javascript, ruby, LISP) or <em>tuples</em> (python, Haskell, .NET).</p>
+<p>Python in particular uses notation inspired by set theory. Python represents ordered pairs with <em>tuples</em>. Let <span class="math">\(A = \{0,1,2,3\}\)</span> and <span class="math">\(B = \{4,5,6\}\)</span>, then their product is computed as follows, using a <em>comprehension</em>:<a class="anchor-link" href="#block-1"/></p>
 </div>
 <div class="cell border-box-sizing code_cell vbox">
 <div class="input hbox">
 <div class="prompt input_prompt">
-In&nbsp;[2]:
+In&nbsp;[1]:
 </div>
 <div class="input_area box-flex1">
 <div class="highlight-ipynb"><pre class="ipynb"><span class="n">A</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
@@ -1721,42 +1730,212 @@ set([(2, 6), (1, 5), (1, 4), (0, 6), (0, 5), (3, 6), (0, 4), (1, 6), (2, 5), (3,
 
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Arbitrary-Cartesian-Products">Arbitrary Cartesian Products<a class="anchor-link" href="#Arbitrary-Cartesian-Products">&#182;</a></h3>
+In set theory notation, the cartesian product would be formed essentially the same way:
+<p style="text-align:center">
+<span class="math">\(A \times B := \{\langle a,b\rangle : a \in A, b \in B\}\)</span>
+</p>
+<p>That funny <span class="math">\(\in\)</span> symbol is mathematical shorthand for <em>in</em>.</p>
+There are two important operations over pairs in set theory: they are called <em>projections</em>, denoted <span class="math">\(\pi_1\)</span> and <span class="math">\(\pi_2\)</span>. They obey the following rules:
+<p style="text-align:center">
+<span class="math">\(\pi_1(\langle a, b\rangle) = a\)</span>
+</p>
+<p style="text-align:center">
+<span class="math">\(\pi_2(\langle a, b\rangle) = b\)</span>
+</p>
+<p>The actual definitions of <span class="math">\(\pi_1\)</span> and <span class="math">\(\pi_2\)</span> are messy, but you can read about them over on <a href="https://en.wikipedia.org/wiki/Ordered_pair#Kuratowski_definition">wikipedia</a>.</p>
+<p>In C++ and Haskell, <span class="math">\(\pi_1\)</span> is called <code>first</code> and <span class="math">\(\pi_2\)</span> is called <code>second</code>.</p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Arbitrary-Cartesian-Products">Arbitrary Cartesian Products<a class="anchor-link" href="#Arbitrary-Cartesian-Products">&#182;</a></h2>
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In set theory, it's not enough for mathematicians to have pairwise Cartesian products. Mathematicians demand <em>arbitrary</em> products, denoted with:</p>
+<p>In set theory, it's not enough for mathematicians to have pairwise Cartesian products. Mathematicians use <em>arbitrary</em> products, denoted with:</p>
 <p style="text-align:center">
 <span class="math">\(\displaystyle{\prod_{i \in I} X_i}\)</span>
 </p>
 
-<p>That funny <span class="math">\(\in\)</span> symbol is mathematical shorthand for <em>in</em>. Here <span class="math">\(I\)</span> is an <em>index</em> set, which just assigns labels to the sets in the product. Any set can be used as labels.</p>
+<p>Here <span class="math">\(I\)</span> is an <em>index</em> set, which just assigns labels to the sets in the product. Any set can be used as labels.</p>
+<p>Elements of an arbitrary products cannot be represented as tuples, or even infinite (ie, lazy) lists. This is because an arbitrary product can be over uncountably infinite sets, so no discrete representation will work.</p>
+Instead, elements of <span class="math">\(\displaystyle{\prod_{i \in I} X_i}\)</span> are represented by functions <span class="math">\(\displaystyle f : I \to \bigcup_{i\in I} X_i\)</span>, with the rule that:
+<center>
+<span class="math">\(f(i) \in X_i\)</span>
+</center>
+
+<p>This might seem odd at first, but it isn't so radical. It's easy to switch back and forth between the tuple and functional representation of Cartesian products in Python like so:</p>
+</div>
+<div class="cell border-box-sizing code_cell vbox">
+<div class="input hbox">
+<div class="prompt input_prompt">
+In&nbsp;[2]:
+</div>
+<div class="input_area box-flex1">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">class</span> <span class="nc">CartFun</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tup</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dom</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">tup</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    
+    <span class="k">def</span> <span class="nf">to_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dom</span><span class="p">)</span>
+
+<span class="n">CartFun</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span><span class="o">.</span><span class="n">to_tuple</span><span class="p">()</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+<div class="vbox output_wrapper">
+<div class="output vbox">
+
+
+<div class="hbox output_area"><div class="prompt output_prompt">
+    Out[2]:</div>
+<div class="box-flex1 output_subarea output_pyout">
+
+
+<pre>
+True
+</pre>
+
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Axiom-of-Choice-(v1.0)">Axiom of Choice (v1.0)<a class="anchor-link" href="#Axiom-of-Choice-(v1.0)">&#182;</a></h3>
+<p>The functional representation is both more expressive and less convenient. It is more expressive because you cannot represent infinite types in C++, .NET, or Haskell, so you cannot construct infinite product types with <code>pair</code>s and <code>tuple</code>s in those languages. On the other hand it is much less convenient because it is impossible to verify that an element of an arbitrary product actually obeys the rule that <span class="math">\(f(i) \in X_i\)</span> (unless you are programming in <a href="https://en.wikipedia.org/wiki/Agda_%28programming_language%29">Agda</a> or <a href="https://en.wikipedia.org/wiki/Coq">Coq</a>).</p>
+<p>So while this is a more powerful representation of pairs, a question emerges: <em>how does one create an infinite product for an arbitrary collection of sets?</em> The nested <code>for</code> loop comprehension in <code>[1]</code> will not work; you can't nest an infinite number of them.</p>
+<p><em>You can't program it.</em></p>
+<p><em>You can't definite it in pure mathematics.</em></p>
+<p><em>Whether they exist or not is logically equivalent to the <strong>Axiom of Choice</strong> (v0.1-prerelease).</em></p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Logical-Equivalence">Logical Equivalence<a class="anchor-link" href="#Logical-Equivalence">&#182;</a></h2>
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-Browsing <a href="https://en.wikipedia.org/wiki/Axiom_of_choice">Wikipedia</a>, we find a more daunting definition of the axiom of choice:
+<p>In order to prove that arbitrary Cartesian products are logically equivalent to the axiom of choice, it is necessary to develop a little machinery from set theory.</p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Representing-Functions-as-Sets-of-Pairs">Representing Functions as Sets of Pairs<a class="anchor-link" href="#Representing-Functions-as-Sets-of-Pairs">&#182;</a></h3>
+</div>
+
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In mathematics, any function can be represented by a set of pairs. In fact, in set theory, it's the <em>de facto</em> representation.</p>
 <p style="text-align:center">
-<span class="math">\(\forall X \left[ \varnothing \notin X \implies \exists f \colon X \to \bigcup X \, \forall x \in X . \, f(x) \in x  \right]\)</span>
+<span class="math">\(f = \{ \langle x, f(x)\rangle : x\in dom(f) \}\)</span>
 </p>
 
-<p>Not English. Samuel L. Jackson from <em>Pulp Fiction</em> is very disappointed:</p>
-<p style="text-align:center">
-<img src="http://i.imgur.com/zEGN3.png" alt="Samuel L. Jackson" />
-</p>
+<p>You can do this in software too, provided that the domain is finite:</p>
+</div>
+<div class="cell border-box-sizing code_cell vbox">
+<div class="input hbox">
+<div class="prompt input_prompt">
+In&nbsp;[3]:
+</div>
+<div class="input_area box-flex1">
+<div class="highlight-ipynb"><pre class="ipynb"><span class="k">def</span> <span class="nf">to_pairs</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">dom</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">set</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dom</span><span class="p">)</span>
 
-<p>Here is what those crazy symbols mean:</p>
+<span class="k">def</span> <span class="nf">from_pairs</span><span class="p">(</span><span class="n">pairs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">lookup</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">x_</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">x_</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">lookup</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">f_</span> <span class="o">=</span> <span class="n">from_pairs</span><span class="p">(</span><span class="n">to_pairs</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span>
+
+<span class="n">f</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="n">f_</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+<div class="vbox output_wrapper">
+<div class="output vbox">
+
+
+<div class="hbox output_area"><div class="prompt output_prompt">
+    Out[3]:</div>
+<div class="box-flex1 output_subarea output_pyout">
+
+
+<pre>
+True
+</pre>
+
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="The-Axiom-of-Choice-(v0.2-alpha)">The Axiom of Choice (v0.2-alpha)<a class="anchor-link" href="#The-Axiom-of-Choice-(v0.2-alpha)">&#182;</a></h3>
+</div>
+
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We are ready to present our alternative to the <strong>Axiom of Choice</strong> (v0.1-prerelease)</p>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
 <blockquote>
-<p>For any non-empty set of sets <span class="math">\(X\)</span>, there exists a <em>choice</em> function <span class="math">\(f: X \to \bigcup X\)</span> such that for each <span class="math">\(x\)</span> in <span class="math">\(X\)</span>, we have <span class="math">\(f(x)\)</span> is a member of <span class="math">\(x\)</span></p>
+<p><strong>The Axiom of Choice</strong> (v0.2-alpha): For an arbitrary collection of non-empty sets <span class="math">\(X_i\)</span> indexed by <span class="math">\(I\)</span>, then there exists an <span class="math">\(f \in \displaystyle{\prod_{i \in I} X_i}\)</span>; ie, there is a function <span class="math">\(f:I \to \bigcup_{i\in I} X_i\)</span> such that <span class="math">\(f(i) \in X_i\)</span>.</p>
 </blockquote>
-<p>In other words, if you have a collection of (arbitrary) sets, a choice function let's you <em>pick</em> an element from each one.</p>
 </div>
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Axiom-of-Choice-(v0.2-alpha)">Axiom of Choice (v0.2-alpha)<a class="anchor-link" href="#Axiom-of-Choice-(v0.2-alpha)">&#182;</a></h3>
+<p>The following theorem establishes logical equivalence:</p>
 </div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p><strong>Theorem</strong>: The Axiom of Choice (v0.1-prerelease) holds if and only if The Axiom of Choice (v0.2-alpha) holds</p>
+</blockquote>
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p style="margin-left:45px;">
+<em>Pf.</em>
+</p>
+<p style="margin-left:55px;">
+<p><span class="math">\(\Longrightarrow\)</span> Assume the Axiom of Choice (v0.1-prerelease), and let <span class="math">\(X_i\)</span> be an abitrary collection of non-empty sets indexed by <span class="math">\(I\)</span>. We must find <span class="math">\(f \in \displaystyle{\prod_{i \in I} X_i}\)</span>. Define the function <span class="math">\(\varphi : \left(\bigcup_{i \in I}X_i\right)\times I \to I\)</span> as follows:</p>
+<p style="text-align:center">
+<span class="math">\(\varphi := \{\langle \langle x, i\rangle, i \rangle : i \in I, x \in X_i \}\)</span>
+</p>
 
+<p style="margin-left:55px;">
+It's necessary to prove that <span class="math">\(\varphi\)</span> is well defined. This amounts to proving that if <span class="math">\(\langle x, y\rangle \in \varphi\)</span> and <span class="math">\(\langle x, y&#39;\rangle \in \varphi\)</span>, then <span class="math">\(y = y&#39;\)</span>. But if <span class="math">\(x \in dom(\varphi)\)</span>, <span class="math">\(x = \langle \_, i\rangle\)</span> for some <span class="math">\(i\in I\)</span>, and by construction <span class="math">\(y = y&#39; = i\)</span>.
+</p>
+
+<p style="margin-left:55px;">
+Since no <span class="math">\(X_i\)</span> is empty, then <span class="math">\(\varphi\)</span> is necessarily surjective. By the Axiom of Choice (v0.1-prerelease), it has a right inverse, call it <span class="math">\(\varphi^{-1}: I \to \left(\bigcup_{i \in I}X_i\right)\times I\)</span>. By construction of <span class="math">\(\varphi\)</span>, <span class="math">\(\varphi^{-1}(i) = \langle x, i\rangle\)</span> for some <span class="math">\(x \in X_i\)</span>.
+</p>
+
+<p style="margin-left:55px;">
+So let <span class="math">\(f(i) := \pi_1(\varphi^{-1}(i))\)</span>. Then <span class="math">\(f:I \hookrightarrow \bigcup_{i\in I} X_i\)</span> and <span class="math">\(f(i) \in X_i\)</span>, so <span class="math">\(f \in \displaystyle{\prod_{i \in I} X_i}\)</span> as desired.
+</p>
+
+<p style="margin-left:55px;">
+<span class="math">\(\Longleftarrow\)</span> Assume <em>The Axiom of Choice</em> (v0.2-alpha), and let <span class="math">\(f:A\hookrightarrow B\)</span> be any surjective function. We must construct a right inverse for <span class="math">\(f\)</span>.
+</p>
+
+<p style="margin-left:55px;">
+Define a collection of sets <span class="math">\(X_b := \{ a : a \in A, f(a) = b \}\)</span>. Since <span class="math">\(f\)</span> is surjective, we know that no <span class="math">\(X_b\)</span> is empty, and by <em>The Axiom of Choice</em> (v0.2-alpha) we have some <span class="math">\(g \in \prod_{b \in B} X_b\)</span>. We argue that <span class="math">\(g\)</span> is the right inverse of <span class="math">\(f\)</span>.
+</p>
+
+<p style="margin-left:55px;">
+To show this, we must demonstrate that <span class="math">\(f(g(b)) = b\)</span>. Then <span class="math">\(g(b) \in X_b\)</span>, so <span class="math">\(g(b) = a\)</span> for some <span class="math">\(a\)</span> where <span class="math">\(f(a) = b\)</span>. But then by substitution <span class="math">\(f(g(b)) = b\)</span>, as desired.
+</p>
+<p style="margin-left:45px;">
+<strong>QED</strong>
+</p>
+
+</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There you have it; we have established a second form of the axiom of choice. It is sadly harder to understand, and less compelling than the first form. Other forms of the axiom of choice are harder still to understand.</p>
+</div>
   </div><!-- /.entry-content -->
    <footer class="post-info text-muted">
     Posted on <abbr class="published" title="2013-12-24T00:00:00">

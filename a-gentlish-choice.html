@@ -1725,7 +1725,7 @@ In&nbsp;[1]:
 <p>If <span class="math">\(f\)</span> was a function in a typed languages like C, C++, JAVA, or .NET languages, the domain <span class="math">\(A\)</span> would be type of the <em>input</em> and the range <span class="math">\(B\)</span> would be type of the <em>output</em>.</p>
 <p>Here's the definition of a surjective function:</p>
 <blockquote>
-<p>A <a href="https://en.wikipedia.org/wiki/Surjective_function"><em>surjective function</em></a> (sometimes called an <em>onto function</em>) <span class="math">\(\ f: X \to Y\)</span> is a function where for every value <span class="math">\(y\)</span> in the range <span class="math">\(Y\)</span>, there is some value <span class="math">\(x\)</span> in the domain <span class="math">\(X\)</span> such that <span class="math">\(\ f(x) = y\)</span>.</p>
+<p>A <a href="https://en.wikipedia.org/wiki/Surjective_function"><em>surjective function</em></a> (sometimes called an <em>onto function</em>) <span class="math">\(\ f: X \hookrightarrow Y\)</span> is a function where for every value <span class="math">\(y\)</span> in the range <span class="math">\(Y\)</span>, there is some value <span class="math">\(x\)</span> in the domain <span class="math">\(X\)</span> such that <span class="math">\(\ f(x) = y\)</span>.</p>
 </blockquote>
 <p>Admittedly, that's the sort of language that turns a lot of people off to mathematics.</p>
 <p>Fortunately, surjectivity can also be understood via pictures, and a somewhat contrived game.</p>
@@ -1735,7 +1735,7 @@ In&nbsp;[1]:
 </div>
 
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>An example of a surjective function is <span class="math">\(f_0:\mathbb{R}\to\mathbb{R}\)</span>, defined to be:</p>
+<p>An example of a surjective function is <span class="math">\(f_0:\mathbb{R}\hookrightarrow\mathbb{R}\)</span>, defined to be:</p>
 <p style="text-align:center">
 <span class="math">\(f_0(x) = x^3 + 10 x^2 + 1\)</span>
 </p>
@@ -2299,7 +2299,7 @@ In&nbsp;[3]:
 </div>
 <div class="input_area box-flex1">
 <div class="highlight-ipynb"><pre class="ipynb"><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">subplots</span><span class="p">()</span>
-<span class="n">axhline</span><span class="p">(</span><span class="mi">118</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>    <span class="c"># Player 1&#39;s move</span>
+<span class="n">axhline</span><span class="p">(</span><span class="mi">118</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">)</span>   <span class="c"># Player 1&#39;s move</span>
 <span class="n">axvline</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">)</span> <span class="c"># Player 2&#39;s move</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f0</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s">&quot;black&quot;</span><span class="p">);</span>
 </pre></div>
@@ -4028,7 +4028,7 @@ RFQqnEASERERUalwAklEREREpcIJJBERERGVCieQRERERFQqnEASERERUalwAklEREREpfL/yNsb
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>The <em>winning strategy</em> we described for the surjection game is called a <em>right inverse</em> in mathematics. This because we can describe a winning strategy algebraically as follows:</p>
 <blockquote>
-Given a function <span class="math">\(f: A \to B\)</span>, we say that <span class="math">\(g : B \to A\)</span> is <em>right inverse</em> if and only if for all <span class="math">\(b\)</span> in <span class="math">\(B\)</span>:
+Given a function <span class="math">\(f: A \hookrightarrow B\)</span>, we say that <span class="math">\(g : B \to A\)</span> is <em>right inverse</em> if and only if for all <span class="math">\(b\)</span> in <span class="math">\(B\)</span>:
 <p style="text-align:center">
 <span class="math">\(f(g(b)) = b\)</span>
 </p>
